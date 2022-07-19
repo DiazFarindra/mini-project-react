@@ -8,6 +8,7 @@ function BarangUpdate() {
   const [harga, setHarga] = useState('')
   const [formError, setFormError] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   const navigate = useNavigate()
   const param = useParams()
@@ -15,14 +16,18 @@ function BarangUpdate() {
   useEffect(() => {
     const getBarang = async () => {
       try {
-        const { data: { barang } } = await axiosInstance.get(`/barang/${param.kode}`)
-        setNama(barang.nama)
-        setKategori(barang.kategori)
-        setHarga(barang.harga)
+        const res = await axiosInstance.get(`/barang/${param.kode}`)
+        setNama(res.data.barang.nama)
+        setKategori(res.data.barang.kategori)
+        setHarga(res.data.barang.harga)
         setLoading(false)
       } catch (e) {
         setLoading(true)
         console.log(e.message)
+
+        if (e.response.status === 404) {
+          setNotFound(true)
+        }
       }
     }
 
@@ -50,6 +55,14 @@ function BarangUpdate() {
     navigate('/barang', { replace: true })
   }
 
+  if (notFound) {
+    return (
+      <div className='flex'>
+        <h1 className='text-6xl'>404 - not found</h1>
+      </div>
+    )
+  }
+
   return (
     <div className='flex justify-center'>
       <div className='w-1/3 p-5 border-2 border-blue-400 rounded-md'>
@@ -70,7 +83,7 @@ function BarangUpdate() {
             </div>
             <div className='mx-0 my-2'>
               <label htmlFor="harga" className='block text-lg font-medium text-slate-700'>Harga</label>
-              <input type="number" name='harga' id='harga' value={harga} onChange={(e) => setHarga(e.target.value)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='harga ...' />
+              <input type="number" name='harga' id='harga' min='100' value={harga} onChange={(e) => setHarga(e.target.value)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='harga ...' />
               { formError && ( <small className='text-red-500'>harga tidak bisa kosong</small> ) }
             </div>
             <button type='submit' className='w-1/4 px-4 py-2 text-white bg-blue-400 rounded-md hover:bg-blue-600'>save</button>

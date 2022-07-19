@@ -49,7 +49,7 @@ function BarangCreate() {
                 </div>
                 <div className='mx-0 my-2'>
                     <label htmlFor="harga" className='block text-lg font-medium text-slate-700'>Harga</label>
-                    <input type="number" name='harga' id='harga' value={harga} onChange={(e) => setHarga(e.target.value)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='harga ...' />
+                    <input type="number" name='harga' id='harga' min='100' value={harga} onChange={(e) => setHarga(e.target.value)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='harga ...' />
                     { formError && ( <small className='text-red-500'>harga tidak bisa kosong</small> ) }
                 </div>
                 <button type='submit' className='w-1/4 px-4 py-2 text-white bg-blue-400 rounded-md hover:bg-blue-600'>save</button>

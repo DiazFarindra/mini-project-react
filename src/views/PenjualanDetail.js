@@ -5,6 +5,7 @@ import axiosInstance from '../axios'
 function PenjualanDetail() {
   const [penjualan, setPenjualan] = useState({})
   const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   const param = useParams()
 
@@ -16,12 +17,24 @@ function PenjualanDetail() {
     } catch (e) {
       setLoading(true)
       console.log(e.message)
+
+      if (e.response.status === 404) {
+        setNotFound(true)
+      }
     }
   }
 
   useEffect(() => {
     getPenjualan(param.nota)
   }, [param])
+
+  if (notFound) {
+    return (
+      <div className='flex'>
+        <h1 className='text-6xl'>404 - not found</h1>
+      </div>
+    )
+  }
 
   return (
     <div>

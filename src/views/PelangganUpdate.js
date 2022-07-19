@@ -8,6 +8,7 @@ function PelangganUpdate() {
   const [jenisKelamin, setJenisKelamin] = useState('')
   const [formError, setFormError] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   const navigate = useNavigate()
   const param = useParams()
@@ -23,6 +24,10 @@ function PelangganUpdate() {
       } catch (e) {
         setLoading(true)
         console.log(e.message)
+
+        if (e.response.status === 404) {
+          setNotFound(true)
+        }
       }
     }
 
@@ -49,6 +54,14 @@ function PelangganUpdate() {
     }
 
     navigate('/pelanggan', { replace: true })
+  }
+
+  if (notFound) {
+    return (
+      <div className='flex'>
+        <h1 className='text-6xl'>404 - not found</h1>
+      </div>
+    )
   }
 
   return (

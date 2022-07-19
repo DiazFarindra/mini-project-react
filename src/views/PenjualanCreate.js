@@ -105,7 +105,7 @@ function PenjualanCreate() {
               </div>
               <div className="mx-0 my-2">
                 <label htmlFor="qty" className='block text-lg font-medium text-slate-700'>qty</label>
-                <input type='number' name='qty' id='qty' value={input.qty} onChange={(event) => handleFormChange(index, event)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='qty' />
+                <input type='number' name='qty' id='qty' min='1' value={input.qty} onChange={(event) => handleFormChange(index, event)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='qty' />
               </div>
               {inputFields.length !== 1 && (
                 <button type='button' className='text-blue-400 underline hover:text-blue-500' onClick={() => removeFields(index)}>remove</button>

@@ -5,6 +5,7 @@ import Barang from '../views/Barang';
 import BarangCreate from '../views/BarangCreate';
 import BarangUpdate from '../views/BarangUpdate';
 import Home from '../views/Home';
+import NotFound from '../views/NotFound';
 import Pelanggan from '../views/Pelanggan';
 import PelangganCreate from '../views/PelangganCreate';
 import PelangganUpdate from '../views/PelangganUpdate';
@@ -30,6 +31,8 @@ function Web() {
       <Route path='penjualan/create' element={<PenjualanCreate />} />
       <Route path='penjualan/:nota/edit' element={<PenjualanUpdate />} />
       <Route path='penjualan/:nota' element={<PenjualanDetail />} />
+
+      <Route path='*' element={<NotFound />} />
     </Routes>
   )
 }

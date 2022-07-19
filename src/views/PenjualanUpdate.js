@@ -12,18 +12,28 @@ function PenjualanCreate() {
   const [barang, setBarang] = useState([])
   const [formError, setFormError] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [notFound, setNotFound] = useState(false)
 
   const navigate = useNavigate()
   const param = useParams()
 
   const getPenjualan = async (nota) => {
-    const { data: { penjualan } } = await axiosInstance.get(`/penjualan/${nota}`)
-    setTgl(penjualan.tgl)
-    setKodePelanggan(penjualan.kode_pelanggan)
-    setInputFields(penjualan.item_penjualan.map((item) => (
-      { kode_barang: item.kode_barang, qty: item.qty }
-    )))
-    setLoading(false)
+    try {
+      const { data: { penjualan } } = await axiosInstance.get(`/penjualan/${nota}`)
+      setTgl(penjualan.tgl)
+      setKodePelanggan(penjualan.kode_pelanggan)
+      setInputFields(penjualan.item_penjualan.map((item) => (
+        { kode_barang: item.kode_barang, qty: item.qty }
+      )))
+      setLoading(false)
+    } catch (e) {
+      setLoading(true)
+      console.log(e.message)
+
+      if (e.response.status === 404) {
+        setNotFound(true)
+      }
+    }
   }
 
   const getPelanggan = async () => {
@@ -80,6 +90,14 @@ function PenjualanCreate() {
     navigate('/penjualan', { replace: true })
   }
 
+  if (notFound) {
+    return (
+      <div className='flex'>
+        <h1 className='text-6xl'>404 - not found</h1>
+      </div>
+    )
+  }
+
   return (
     <div className='flex justify-center'>
       <div className='w-1/3 p-5 border-2 border-blue-400 rounded-md'>
@@ -116,7 +134,7 @@ function PenjualanCreate() {
                   </div>
                   <div className="mx-0 my-2">
                     <label htmlFor="qty" className='block text-lg font-medium text-slate-700'>qty</label>
-                    <input type='number' name='qty' id='qty' value={input.qty} onChange={(event) => handleFormChange(index, event)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='qty' />
+                    <input type='number' name='qty' id='qty' min='1' value={input.qty} onChange={(event) => handleFormChange(index, event)} className={`w-full px-2 py-2 my-2 border rounded-md ${formError ? 'border-2 border-red-500' : 'focus:outline-slate-500 border-slate-400'}`} placeholder='qty' />
                   </div>
                   {inputFields.length !== 1 && (
                     <button type='button' className='text-blue-400 underline hover:text-blue-500' onClick={() => removeFields(index)}>remove</button>
