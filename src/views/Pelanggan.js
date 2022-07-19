@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, Outlet } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axiosInstance from '../axios'
 
 function Pelanggan() {
@@ -17,12 +17,26 @@ function Pelanggan() {
     }
   }
 
+  const deletePelanggan = async (idPelanggan) => {
+    const confirm = window.confirm('anda yakin?')
+
+    try {
+      if (confirm) {
+        await axiosInstance.delete(`/pelanggan/${idPelanggan}`)
+        window.location.reload()
+      }
+      return
+    } catch (e) {
+      console.log(e.message)
+    }
+  }
+
   useEffect(() => {
     getPelanggan()
-    // return () => {
-    //   // cleanup
-    //   setPelanggan([])
-    // };
+    return () => {
+      // cleanup
+      setPelanggan([])
+    };
   }, [])
 
   return (
@@ -35,8 +49,6 @@ function Pelanggan() {
         <Link to={'create'} className='px-5 py-2 bg-green-500 rounded-md text-green-50'>tambah pelanggan</Link>
       </div>
 
-      <Outlet />
-
       <div>
         { loading && 'loading ...' }
         { !loading && (
@@ -47,6 +59,7 @@ function Pelanggan() {
               <th className='p-4 bg-slate-400'>NAMA</th>
               <th className='p-4 bg-slate-400'>DOMISILI</th>
               <th className='p-4 bg-slate-400'>JENIS KELAMIN</th>
+              <th className='p-4 bg-slate-400'>action</th>
             </tr>
           </thead>
           <tbody className='text-slate-200'>
@@ -56,6 +69,11 @@ function Pelanggan() {
                 <td className='p-4 bg-slate-600'>{item.nama}</td>
                 <td className='p-4 bg-slate-600'>{item.domisili}</td>
                 <td className='p-4 bg-slate-600'>{item.jenis_kelamin}</td>
+                <td className='p-4 bg-slate-600'>
+                  <Link to={`/pelanggan/${item.id_pelanggan}`} className='mr-4 text-green-400 underline hover:text-green-500'>edit</Link>
+                  |
+                  <button type='button' onClick={() => deletePelanggan(item.id_pelanggan)} className='ml-4 text-red-400 underline hover:text-red-500'>delete</button>
+                </td>
               </tr>
             )) }
           </tbody>
